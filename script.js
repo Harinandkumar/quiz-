@@ -102,6 +102,8 @@ function startQuiz() {
   currentQuestionIndex = 0;
   score = 0;
   nextButton.innerHTML = "आगे";
+  nextButton.removeEventListener("click", startQuiz);  // Ensure this listener is removed when starting the quiz
+  nextButton.addEventListener("click", handleNextButton);  // Add click listener for handling next question
   showQuestion();
 }
 
@@ -158,21 +160,22 @@ function clearStatusClass(element) {
   element.classList.remove("selected");
 }
 
-nextButton.addEventListener("click", () => {
+function handleNextButton() {
   currentQuestionIndex++;
   if (currentQuestionIndex < questions.length) {
     showQuestion();
   } else {
     showScore();
   }
-});
+}
 
 function showScore() {
   resetState();
   questionElement.innerText = `आपने ${questions.length} में से ${score} अंक प्राप्त किए हैं!`;
   nextButton.innerText = "पुनः आरंभ करें";
   nextButton.style.display = "block";
-  nextButton.addEventListener("click", startQuiz);
+  nextButton.removeEventListener("click", handleNextButton);  // Ensure this listener is removed when showing the score
+  nextButton.addEventListener("click", startQuiz);  // Add click listener for restarting the quiz
 }
 
 startQuiz();
